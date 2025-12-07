@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,11 +16,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Disable foreign key checks to prevent issues with deletions
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        // Clear existing data
+        DB::table('users')->truncate();
+
+        // Re-enable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        // Call seeders
+        $this->call([
+            UserSeeder::class,
         ]);
+
     }
 }

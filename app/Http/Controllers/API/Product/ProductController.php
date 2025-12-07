@@ -41,12 +41,14 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request): JsonResponse
     {
-        $product = $this->service->create($request->validated());
-        $data = new ProductResource($product);
+        $data = $request->validated();
+        $data['images'] = $request->file('images');
+
+        $product = $this->service->create($data);
 
         return $this->success(
             'Product saved successfully',
-            $data,
+            new ProductResource($product),
             201
         );
     }
@@ -70,11 +72,14 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product): JsonResponse
     {
-        $this->service->update($product, $request->validated());
+        $data = $request->validated();
+        $data['images'] = $request->file('images');
+
+        $updated = $this->service->update($product, $data);
 
         return $this->success(
             'Product updated successfully',
-            new ProductResource($product),
+            new ProductResource($updated),
             200
         );
     }

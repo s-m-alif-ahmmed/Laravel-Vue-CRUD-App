@@ -16,8 +16,7 @@ class ProductResource extends JsonResource
             'price'=> (string)$this->price,
             'stock'=> $this->stock,
             'status'=> $this->status,
-            'created_at'=> $this->created_at?->toDateTimeString(),
-            'updated_at'=> $this->updated_at?->toDateTimeString(),
+            'images' => ProductImageResource::collection($this->images),
         ];
     }
 }

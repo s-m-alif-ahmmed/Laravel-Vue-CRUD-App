@@ -11,6 +11,7 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'thumbnail' => 'required|mimes:jpg,jpeg,png,webp|max:10240',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
@@ -18,7 +19,7 @@ class StoreProductRequest extends FormRequest
 
             // multiple images
             'images'   => 'nullable|array',
-            'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:10240',
         ];
     }
 }

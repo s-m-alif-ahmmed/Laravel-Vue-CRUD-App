@@ -18,12 +18,15 @@ class ProductService
 
     public function create(array $data)
     {
-        // Create product first
+        // Upload thumbnail
+        $thumbnail = $this->uploadToPublic($data['thumbnail'], 'uploads/products/thumbnail');
+        $data['thumbnail'] = $thumbnail[0] ?? null;
+
         $product = Product::create($data);
 
         // Handle images
         if (!empty($data['images'])) {
-            $uploaded = $this->uploadToPublic($data['images'], 'uploads/products');
+            $uploaded = $this->uploadToPublic($data['images'], 'uploads/products/images');
 
             foreach ($uploaded as $path) {
                 ProductImage::create([
@@ -43,7 +46,17 @@ class ProductService
 
     public function update(Product $product, array $data)
     {
-        $product->update($data);
+        // Upload thumbnail
+        $thumbnail = $this->uploadToPublic($data['thumbnail'], 'uploads/products/thumbnail');
+
+        $product->update([
+            'name' => $data['name'],
+            'thumbnail' => $thumbnail[0],
+            'description' => $data['description'],
+            'price' => $data['price'],
+            'stock' => $data['stock'],
+            'status' => $data['status'],
+        ]);
 
         // If new images uploaded
         if (!empty($data['images'])) {
@@ -56,7 +69,7 @@ class ProductService
             }
 
             // Upload new images
-            $uploaded = $this->uploadToPublic($data['images'], 'uploads/products');
+            $uploaded = $this->uploadToPublic($data['images'], 'uploads/products/images');
 
             foreach ($uploaded as $path) {
                 ProductImage::create([

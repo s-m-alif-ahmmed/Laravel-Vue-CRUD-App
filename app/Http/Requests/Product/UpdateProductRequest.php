@@ -12,6 +12,7 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|required|string|max:255',
+            'thumbnail' => 'sometimes|mimes:jpg,jpeg,png,webp|max:10240',
             'description' => 'nullable|string',
             'price' => 'sometimes|required|numeric|min:0',
             'stock' => 'sometimes|required|integer|min:0',
@@ -19,7 +20,7 @@ class UpdateProductRequest extends FormRequest
 
             // multiple images
             'images'   => 'nullable|array',
-            'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:10240',
         ];
     }
 }

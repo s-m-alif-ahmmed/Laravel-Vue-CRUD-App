@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { logout as authLogout } from '@/service/auth';
+import { logout as authLogout } from '@/service/Auth';
 import { useRouter } from 'vue-router';
 import AppMenuItem from './AppMenuItem.vue';
 

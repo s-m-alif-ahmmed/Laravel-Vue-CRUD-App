@@ -1,7 +1,7 @@
 <script setup>
 import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
 import { ref } from 'vue';
-import { login } from '@/service/auth.js';
+import { login } from '@/service/Auth.js';
 import { useRouter } from 'vue-router';
 
 const email = ref('');

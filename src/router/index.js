@@ -1,6 +1,6 @@
 import AppLayout from '@/layout/AppLayout.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import { isAuthenticated } from '@/service/auth.js';
+import { isAuthenticated } from '@/service/Auth.js';
 
 const router = createRouter({
     history: createWebHistory(),

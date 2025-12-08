@@ -1,4 +1,4 @@
-import api from './api';
+import api from './Api';
 
 export const ProductService = {
 
@@ -21,7 +21,7 @@ export const ProductService = {
         return api.post('/products', payload, { headers });
     },
 
-    // PUT /products/{id}  (Laravel: FormData -> POST + _method=PUT)
+    // PUT /products/{id}
     update(id, payload) {
         const headers = payload instanceof FormData
             ? { 'Content-Type': 'multipart/form-data' }
@@ -32,7 +32,7 @@ export const ProductService = {
             return api.post(`/products/${id}`, payload, { headers });
         }
 
-        return api.put(`/products/${id}`, payload);
+        return api.put(`/products/${id}`, payload, { headers });
     },
 
     // DELETE /products/{id}

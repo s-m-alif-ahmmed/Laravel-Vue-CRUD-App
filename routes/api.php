@@ -8,9 +8,6 @@ use App\Http\Controllers\API\Auth\RegisterController;
 use App\Http\Controllers\API\Auth\ProfileUpdateController;
 
 
-// Products List Routes
-Route::get('products/list', [ProductController::class, 'index']);
-
 Route::middleware(['guest'])->group(function () {
 
     //  Authentication routes
@@ -37,6 +34,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/change-password', [ProfileUpdateController::class, 'changePassword']);
 
     // Products Routes
-    Route::apiResource('products', ProductController::class)->only(['store', 'show', 'update', 'destroy']);
+    Route::apiResource('products', ProductController::class);
 
 });

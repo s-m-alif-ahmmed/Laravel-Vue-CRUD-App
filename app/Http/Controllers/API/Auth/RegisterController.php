@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers\API\Auth;
 
-
-use ALifAhmmed\HelperPackage\Helpers\Helper;
-use App\Models\SetReminder;
 use App\Traits\AllTraits;
-use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use App\Models\User;
 use Ichtrojan\Otp\Otp;
@@ -16,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 
 class RegisterController extends Controller
@@ -25,33 +20,14 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        $request->merge([
-            'terms' => filter_var($request->terms, FILTER_VALIDATE_BOOLEAN),
-        ]);
-
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-            'confirm_password' => 'required',
+            'password' => 'required|min:6|confirmed',
         ]);
-
-        if ($request->password !== $request->confirm_password)
-        {
-            return $this->error('Passwords do not match');
-        }
 
         DB::beginTransaction();
         try {
-
-            // Base profile URL
-            $base_url = Str::slug($request->name);
-            $profile_url = $base_url;
-
-            // Check for existing profile URLs and generate a unique one
-            while (User::where('url', $profile_url)->exists()) {
-                $profile_url = $base_url . '_' . Str::random(5);
-            }
 
             // Create user
             $user = User::create([
@@ -59,32 +35,30 @@ class RegisterController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role' => 'User',
-                'url' => $profile_url,
+                'email_verified_at' => now(),
             ]);
 
-            // default set-reminder
-            $set_reminder = SetReminder::create([
-                'user_id' => $user->id,
-                'day' => 'Sunday',
-                'time_format' => '12',
-                'time' => now(),
-            ]);
+            // Login user after registration
+            Auth::login($user);
 
-            // Send OTP
-            $otp = $this->send_otp($user);
+            // Generate sanctum token
+            $token = $user->createToken('AuthToken')->plainTextToken;
 
-            if (!$otp) {
-                throw new \Exception('Failed to send OTP.');
-            }
+            $data = [
+                'token_type' => 'Bearer',
+                'token' => $token,
+                'data' => $user,
+            ];
 
             DB::commit();
-            return $this->success('Registered successfully.', ['otp' => $otp->token,'email' => $user->email], 201);
+            return $this->success('Registered successfully.', $data, 201);
 
         } catch (\Exception $exception) {
             DB::rollBack();
             return $this->error($exception->getMessage(), 500);
         }
     }
+
 
     public function send_otp(User $user,$mailType = 'verify')
     {
@@ -183,7 +157,7 @@ class RegisterController extends Controller
         if($verify->status){
             $user = User::where('email', $request->email)->first();
             if(!$user){
-                return Helper::jsonErrorResponse('Email not found',404);
+                return $this->error('Email not found',404);
             }
             $user->reset_password_token = \Str::random(40);
             $user->reset_password_token_exp = Carbon::now()->minutes(15);

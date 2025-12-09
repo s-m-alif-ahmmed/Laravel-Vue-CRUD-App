@@ -26,6 +26,7 @@ class User extends Authenticatable
         'role',
         'reset_code',
         'reset_code_expires_at',
+        'email_verified_at',
     ];
 
     /**

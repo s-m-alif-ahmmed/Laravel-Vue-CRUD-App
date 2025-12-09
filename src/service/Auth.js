@@ -21,6 +21,28 @@ export async function login(credentials) {
     }
 }
 
+export async function register(payload) {
+    try {
+        const res = await api.post("/register", payload);
+
+        // Correct extraction based on your API response
+        const token = res.data.data.token;
+        const user = res.data.data.data;
+
+        if (!token) throw new Error("Token not returned from API");
+
+        // Store token & user
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+
+        return { token, user };
+
+    } catch (err) {
+        console.error("Register failed:", err.response?.data || err);
+        throw err;
+    }
+}
+
 export async function logout() {
     try { await api.post('/logout'); } catch (e) { console.warn('Logout API error', e); }
     localStorage.removeItem('token');

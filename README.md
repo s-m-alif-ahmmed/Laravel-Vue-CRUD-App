@@ -1,3 +1,26 @@
-Sakai is an application template for Vue based on the [create-vue](https://github.com/vuejs/create-vue), the recommended way to start a Vite-powered Vue projects.
+### Project — Setup & Installation Guide
 
-Visit the [documentation](https://sakai.primevue.org/documentation) to get started.
+This guide explains how to install, configure, and run the Vue 3 project after cloning it from GitHub.
+
+1. Clone the Repository
+```bash
+git clone -b frontend --single-branch https://github.com/s-m-alif-ahmmed/Laravel-Vue-CRUD-App.git
+```
+
+Move into the project bra:
+
+cd your-repository
+
+2. Install Dependencies
+
+Then install all required packages:
+```bash
+npm install
+```
+
+3. Run the Development Server
+
+Start the Vue dev server:
+```bash
+npm run dev
+```

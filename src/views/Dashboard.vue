@@ -72,7 +72,7 @@ async function saveProduct() {
 
         if (product.value.id) {
             // Update product
-            formData.append('_method', 'PUT'); // Laravel expects this for PUT via POST
+            formData.append('_method', 'POST'); // Laravel expects this for POST
             await ProductService.update(product.value.id, formData);
             toast.add({ severity: 'success', summary: 'Updated', detail: 'Product updated successfully' });
         } else {

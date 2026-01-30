@@ -9,7 +9,7 @@ export const ProductService = {
 
     // GET /products/{id}
     show(id) {
-        return api.get(`/products/${id}`);
+        return api.get(`/products/show/${id}`);
     },
 
     // POST /products
@@ -18,25 +18,25 @@ export const ProductService = {
             ? { 'Content-Type': 'multipart/form-data' }
             : {};
 
-        return api.post('/products', payload, { headers });
+        return api.post('/products/store', payload, { headers });
     },
 
-    // PUT /products/{id}
+    // POST /products/{id}
     update(id, payload) {
         const headers = payload instanceof FormData
             ? { 'Content-Type': 'multipart/form-data' }
             : {};
 
         if (payload instanceof FormData) {
-            payload.append('_method', 'PUT');
-            return api.post(`/products/${id}`, payload, { headers });
+            payload.append('_method', 'POST');
+            return api.post(`/products/update/${id}`, payload, { headers });
         }
 
-        return api.put(`/products/${id}`, payload, { headers });
+        return api.post(`/products/update/${id}`, payload, { headers });
     },
 
     // DELETE /products/{id}
     delete(id) {
-        return api.delete(`/products/${id}`);
+        return api.delete(`/products/delete/${id}`);
     }
 };

@@ -3,11 +3,12 @@ import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
 import { ref } from 'vue';
 import { login } from '@/service/Auth.js';
 import { useRouter } from 'vue-router';
-import { useToast } from 'primevue/usetoast';
+import { useToast } from "primevue/usetoast";
 
 const email = ref('');
 const password = ref('');
 const checked = ref(false);
+const toast = useToast();
 
 const router = useRouter();
 

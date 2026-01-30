@@ -47,11 +47,13 @@ class ProductService
     public function update(Product $product, array $data)
     {
         // Upload thumbnail
-        $thumbnail = $this->uploadToPublic($data['thumbnail'], 'uploads/products/thumbnail');
+        if (!empty($data['thumbnail'])) {
+            $thumbnail = $this->uploadToPublic($data['thumbnail'], 'uploads/products/thumbnail');
+        }
 
         $product->update([
             'name' => $data['name'],
-            'thumbnail' => $thumbnail[0],
+            'thumbnail' => $thumbnail[0] ?? $product->thumbnail,
             'description' => $data['description'],
             'price' => $data['price'],
             'stock' => $data['stock'],
@@ -82,7 +84,7 @@ class ProductService
         return $product->load('images');
     }
 
-    public function delete(Product $product): bool
+    public function delete(Product $product)
     {
         $this->deleteFromPublic($product, 'image');
         return $product->delete();

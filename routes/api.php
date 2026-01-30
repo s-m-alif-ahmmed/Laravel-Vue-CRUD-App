@@ -8,6 +8,11 @@ use App\Http\Controllers\API\Auth\RegisterController;
 use App\Http\Controllers\API\Auth\ProfileUpdateController;
 
 
+
+//Route::options('{any}', function () {
+//    return response()->noContent();
+//})->where('any', '.*');
+
 Route::middleware(['guest'])->group(function () {
 
     //  Authentication routes
@@ -20,7 +25,7 @@ Route::middleware(['guest'])->group(function () {
     Route::post('reset-password', [RegisterController::class, 'reset_password']);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
 
     // common routes
     Route::get('/user-detail', [LoginController::class, 'userDetails']);
@@ -34,6 +39,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/change-password', [ProfileUpdateController::class, 'changePassword']);
 
     // Products Routes
-    Route::apiResource('products', ProductController::class);
+    Route::get('/products/list', [ProductController::class, 'index']);
+    Route::get('/products/show/{id}', [ProductController::class, 'show']);
+    Route::post('/products/store', [ProductController::class, 'store']);
+    Route::post('/products/update/{product}', [ProductController::class, 'update']);
+    Route::delete('/products/delete/{product}', [ProductController::class, 'destroy']);
 
 });

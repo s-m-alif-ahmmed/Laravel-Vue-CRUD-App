@@ -88,10 +88,7 @@ class ProductController extends Controller
     {
         $this->service->delete($product);
 
-        return $this->ok(
-            'Product deleted successfully',
-            200
-        );
+        return $this->ok('Product deleted successfully', 200);
     }
 
 }
